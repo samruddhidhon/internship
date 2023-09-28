@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... Your existing head content ... -->
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+<body>
+    <div class="container">
+        <div class="to-do">
+            <header>
+                <h1>Task List</h1>
+                <form id="new-task-form">
+                    <input type="text" id="new-task-input" placeholder="Enter tasks here...">
+                    <input type="submit" id="new-task-submit" value="Add task">
+                </form>
+            </header>
+        </div>
+    </div>
+    <main>
+        <section class="task-list">
+            <h2>Tasks</h2>
+            <div id="tasks">
+                <!-- Tasks will be added here dynamically using JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select form and tasks container
+            const newTaskForm = document.getElementById('new-task-form');
+            const tasksContainer = document.getElementById('tasks');
+            let editMode = false;
+            let editedTask = null;
+
+            // Function to add a new task
+            function addTask(taskText) {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task';
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'content';
+
+                const taskInput = document.createElement('input');
+                taskInput.className = 'text';
+                taskInput.type = 'text';
+                taskInput.value = taskText;
+                taskInput.classList.add('editable'); // Initially, the input is editable
+
+                contentDiv.appendChild(taskInput);
+
+                const actionDiv = document.createElement('div');
+                actionDiv.className = 'action';
+
+                const editButton = document.createElement('button');
+                editButton.className = 'Edit';
+                editButton.textContent = 'Edit';
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'dlt';
+                deleteButton.textContent = 'Delete';
+
+                actionDiv.appendChild(editButton);
+                actionDiv.appendChild(deleteButton);
+
+                taskDiv.appendChild(contentDiv);
+                taskDiv.appendChild(actionDiv);
+
+                tasksContainer.appendChild(taskDiv);
+
+                // Add click event handler for editing
+                editButton.addEventListener('click', () => {
+                    if (!editMode) {
+                        taskInput.classList.remove('editable');
+                        taskInput.focus();
+                        editedTask = taskInput;
+                        editMode = true;
+                        editButton.textContent = 'Save';
+                    } else {
+                        taskInput.classList.add('editable');
+                        editMode = false;
+                        editButton.textContent = 'Edit';
+                        editedTask = null;
+                    }
+                });
+
+                // Add input event handler for saving edited task
+                taskInput.addEventListener('input', () => {
+                    if (editMode && editedTask === taskInput) {
+                        taskText = taskInput.value.trim();
+                    }
+                });
+            }
+
+            // Function to handle form submission
+            function handleFormSubmit(event) {
+                event.preventDefault();
+                const taskInput = document.getElementById('new-task-input');
+                const taskText = taskInput.value.trim();
+                if (taskText !== '') {
+                    addTask(taskText);
+                    taskInput.value = '';
+                }
+            }
+
+            newTaskForm.addEventListener('submit', handleFormSubmit);
+
+            // Function to handle task deletion
+            function handleTaskDeletion(event) {
+                if (event.target.classList.contains('dlt')) {
+                    const taskDiv = event.target.closest('.task');
+                    if (taskDiv) {
+                        tasksContainer.removeChild(taskDiv);
+                    }
+                }
+            }
+
+            tasksContainer.addEventListener('click', handleTaskDeletion);
+        });
+    </script>
+</body>
+</html>

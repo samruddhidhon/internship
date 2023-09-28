@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Application Form</h1>
+            <form id="application-form">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+                
+                <label for="comments">Additional Comments:</label>
+                <textarea id="comments" name="comments" rows="4"></textarea>
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        
+        <div class="output-container">
+            <h2>Applications Submitted</h2>
+            <div id="user-list"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const applicationForm = document.getElementById('application-form');
+            const userList = document.getElementById('user-list');
+
+            applicationForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const comments = document.getElementById('comments').value;
+
+                // Create a new user entry
+                const userEntry = document.createElement('div');
+                userEntry.className = 'user-entry';
+                userEntry.innerHTML = `
+                    <h3>User Information</h3>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Phone Number:</strong> ${phone}</p>
+                    <p><strong>Additional Comments:</strong> ${comments}</p>
+                `;
+
+                // Append the user entry to the user list
+                userList.appendChild(userEntry);
+
+                // Clear the form
+                applicationForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
